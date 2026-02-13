@@ -105,6 +105,15 @@ EMSYS/
 └── static/
     └── css/
         └── style.css          # Application styling
+    └── js/
+        └── main.js
+    └── svg/
+        ├── administrator-svgrepo-com.svg
+        ├── affiliate-network-ui-svgrepo-com.svg
+        ├── emloyee-svgrepo-com.svg
+        ├── notes-notepad-svgrepo-com.svg
+        └── team-svgrepo-com.svg
+        
 ```
 
 ## Usage Guide
