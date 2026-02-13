@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - EMsys</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Admin Panel</h1>
+            <div class="header-actions">
+                <span>Welcome, Admin</span>
+                <a href="{{ url_for('admin_logout') }}" class="btn btn-logout">Logout</a>
+            </div>
+        </header>
+
+        <!-- Flash Messages -->
+        {% if get_flashed_messages() %}
+            <div class="flash-messages">
+                {% for message in get_flashed_messages(with_categories=True) %}
+                    <div class="flash {{ message[0] }}">
+                        {{ message[1] }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <main>
+            <div class="admin-dashboard">
+                
+                <!-- Add Employee Section -->
+                <section class="card">
+                    <h2>Add New Employee</h2>
+                    <form method="POST" action="{{ url_for('add_employee') }}">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="employee_id">Employee ID:</label>
+                                <input 
+                                    type="text" 
+                                    id="employee_id" 
+                                    name="employee_id" 
+                                    required
+                                    placeholder="e.g., EMP001">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="name">Full Name:</label>
+                                <input 
+                                    type="text" 
+                                    id="name" 
+                                    name="name" 
+                                    required
+                                    placeholder="e.g., Will Smith">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="team">Team:</label>
+                                <select id="team" name="team" required>
+                                    <option value="">Select a team</option>
+                                    {% for team in teams %}
+                                        <option value="{{ team }}">{{ team.capitalize() }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Employee</button>
+                    </form>
+                </section>
+
+                <!-- Employee List Section -->
+                <section class="card">
+                    <h2>All Employees ({{ employees|length }})</h2>
+                    
+                    {% if employees|length == 0 %}
+                        <p class="no-data">No employees added yet. Add your first employee above!</p>
+                    {% else %}
+                        <div class="table-wrapper">
+                            <table class="employee-table">
+                                <thead>
+                                    <tr>
+                                        <th>Employee ID</th>
+                                        <th>Name</th>
+                                        <th>Team</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for employee in employees %}
+                                        <tr>
+                                            <td>{{ employee.id }}</td>
+                                            <td>{{ employee.name }}</td>
+                                            <td>
+                                                <span class="badge badge-{{ employee.team }}">
+                                                    {{ employee.team.capitalize() }}
+                                                </span>
+                                            </td>
+                                            <td class="actions">
+                                                <button 
+                                                    class="btn btn-small btn-edit" 
+                                                    onclick="editEmployee('{{ employee.id }}', '{{ employee.name }}', '{{ employee.team }}')">
+                                                    Edit
+                                                </button>
+                                                <a 
+                                                    href="{{ url_for('delete_employee', employee_id=employee.id) }}" 
+                                                    class="btn btn-small btn-danger"
+                                                    onclick="return confirm('Are you sure you want to delete {{ employee.name }}?')">
+                                                    Delete
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                </section>
+
+                <!-- Update Employee Section (Hidden by default) -->
+                <section class="card" id="update-section" style="display: none;">
+                    <h2>Update Employee</h2>
+                    <form method="POST" action="{{ url_for('update_employee') }}" id="update-form">
+                        <input type="hidden" id="update_employee_id" name="employee_id">
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="update_name">Full Name:</label>
+                                <input 
+                                    type="text" 
+                                    id="update_name" 
+                                    name="name" 
+                                    required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="update_team">Team:</label>
+                                <select id="update_team" name="team" required>
+                                    {% for team in teams %}
+                                        <option value="{{ team }}">{{ team.capitalize() }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Update Employee</button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Cancel</button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- Add Bulletin Board Item Section -->
+                <section class="card">
+                    <h2>Add Bulletin Board Item</h2>
+                    <form method="POST" action="{{ url_for('add_bulletin') }}">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="bulletin_team">Select Team:</label>
+                                <select id="bulletin_team" name="team" required>
+                                    <option value="">Select a team</option>
+                                    {% for team in teams %}
+                                        <option value="{{ team }}">{{ team.capitalize() }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group flex-grow">
+                                <label for="bulletin_item">Task/Announcement:</label>
+                                <input 
+                                    type="text" 
+                                    id="bulletin_item" 
+                                    name="item" 
+                                    required
+                                    placeholder="e.g., Review new designs by Friday">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add to Bulletin Board</button>
+                    </form>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript for Edit Functionality -->
+    <script>
+        function editEmployee(id, name, team) {
+            // Show the update section
+            document.getElementById('update-section').style.display = 'block';
+            
+            // Fill the form with current employee data
+            document.getElementById('update_employee_id').value = id;
+            document.getElementById('update_name').value = name;
+            document.getElementById('update_team').value = team;
+            
+            // Scroll to the update form
+            document.getElementById('update-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function cancelEdit() {
+            // Hide the update section
+            document.getElementById('update-section').style.display = 'none';
+            
+            // Clear the form
+            document.getElementById('update-form').reset();
+        }
+    </script>
+</body>
+</html>

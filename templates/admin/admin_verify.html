@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - EMsys</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>EMsys - Admin Portal</h1>
+            <a href="{{ url_for('index') }}" class="back-link">← Back to Home</a>
+        </header>
+
+        <!-- Flash Messages -->
+        {% if get_flashed_messages() %}
+            <div class="flash-messages">
+                {% for message in get_flashed_messages(with_categories=True) %}
+                    <div class="flash {{ message[0] }}">
+                        {{ message[1] }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <main>
+            <div class="login-box">
+                <h2>Administrator Login</h2>
+                <form method="POST" action="{{ url_for('admin_verify') }}">
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            required
+                            placeholder="Enter admin username">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            required
+                            placeholder="Enter admin password">
+                    </div>
+
+                    <button type="submit" class="btn btn-admin">Login</button>
+                </form>
+            
+            </div>
+        </main>
+    </div>
+</body>
+</html>
