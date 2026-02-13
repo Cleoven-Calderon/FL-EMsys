@@ -6,6 +6,12 @@ A Flask-based web application for managing employees, teams, and team communicat
 
 EMsys is a CRUD application that allows administrators to manage employee records and assign them to teams. Employees can log in to view their team dashboard, see announcements, and view their coworkers.
 
+## Screenshots
+<img width="1919" height="1079" alt="Screenshot 2026-02-13 203740" src="https://github.com/user-attachments/assets/f770ed20-e2ba-4db2-8c85-1dd49358d563" />
+<img width="1919" height="1079" alt="Screenshot 2026-02-13 203804" src="https://github.com/user-attachments/assets/1d3a6576-2a27-41a3-b78f-03c180a2c97f" />
+<img width="1919" height="1079" alt="Screenshot 2026-02-13 203855" src="https://github.com/user-attachments/assets/6883501b-1b5c-42e1-a4d9-f58a16aa3fd2" />
+
+
 ## Features
 
 ### Admin Features
